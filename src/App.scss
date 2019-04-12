@@ -1,0 +1,73 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.App {
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.quote-box {
+  background-color: #fff;
+  width: 40%;
+  padding: 2rem;
+  border-radius: 0.3rem;
+  color: #342124;
+}
+
+.fade {
+  animation: fadeIn 400ms;
+}
+
+.quote {
+  font-size: 1.75rem;
+}
+
+.quote--author {
+  text-align: right;
+  padding: {
+    top: 1rem;
+    right: 1rem;
+  }
+  font-size: 1rem;
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.button {
+  background-color:  #342124;
+  padding: 0.7rem;
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 0.85rem;
+  border-radius: 0.3rem;
+}
+
+.button--tweet {
+  width: 2.5rem;
+  background: {
+    image: url(./twitterIcon.png);
+    position: center;
+    size: 55%;
+    repeat: no-repeat;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    color: transparent;
+  }
+  to {
+    color: #342124;
+  }
+}
