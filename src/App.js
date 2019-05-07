@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.scss';
 import axios from 'axios';
 
+const URL_KEY = 'https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json'
+
 class App extends Component {
 
   state = {
@@ -14,9 +16,10 @@ class App extends Component {
     this.getQuote();
   }
 
+
   getQuote = () => {
     this.setState({fade: true});
-    axios.get('https://gist.githubusercontent.com/camperbot/5a022b72e96c4c9585c32bf6a75f62d9/raw/e3c6895ce42069f0ee7e991229064f167fe8ccdc/quotes.json')
+    axios.get(URL_KEY)
         .then(response => {
           const singleQuote = response.data.quotes[Math.floor(Math.random() * response.data.quotes.length)];
           this.setState({quotes: singleQuote})
