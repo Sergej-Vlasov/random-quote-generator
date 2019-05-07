@@ -8,51 +8,63 @@ class App extends Component {
 
   state = {
     quotes: [],
+    selectedQuote: {},
     error: false,
     fade: false
   }
 
   componentDidMount() {
-    this.getQuote();
+    this.getQuotes();
   }
 
-
-  getQuote = () => {
-    this.setState({fade: true});
-    axios.get(URL_KEY)
+  getQuotes = () => {
+    if(this.state.quotes.length === 0) {
+      axios.get(URL_KEY)
         .then(response => {
-          const singleQuote = response.data.quotes[Math.floor(Math.random() * response.data.quotes.length)];
-          this.setState({quotes: singleQuote})
+          this.setState({quotes: response.data.quotes})
+          this.getRandomQuote();
         })
         .catch(error => {
           console.log(error);
           this.setState({error: true})
         })
+    }
+      
+  }
+
+  getRandomQuote = () => {
+    if(this.state.quotes.length) {
+      this.setState({fade: true});
+      this.setState({selectedQuote: this.state.quotes[Math.floor(Math.random() * this.state.quotes.length)]});
+    } else {
+      this.getQuotes();
+    }
+    
   }
 
   render() {
-    const quote = this.state.quotes;
-    const encodedTweet = encodeURIComponent(`"${quote.quote}" by ${quote.author}`);
+    const { quotes, selectedQuote, error, fade } = this.state;
+    const encodedTweet = encodeURIComponent(`"${selectedQuote.quote}" by ${selectedQuote.author}`);
     let content;
-    if(this.state.error) {
+    if(error) {
       content = 
-        <div id='quote box' className={`quote-box${this.state.fade ? ' fade' : ''}`} onAnimationEnd={() => this.setState({fade: false})}>
+        <div id='quote box' className={`quote-box${fade ? ' fade' : ''}`} onAnimationEnd={() => this.setState({fade: false})}>
           <div id='text' className='quote'>Sorry, something went wrong!</div>
         </div>
-    } else if (!this.state.quotes.quote) {
+    } else if (!quotes.length) {
       content = 
-        <div id='quote box' className={`quote-box${this.state.fade ? ' fade' : ''}`} onAnimationEnd={() => this.setState({fade: false})}>
+        <div id='quote box' className={`quote-box${fade ? ' fade' : ''}`} onAnimationEnd={() => this.setState({fade: false})}>
           <div id='text' className='quote'>Loading quote...</div>
         </div>
     } else {
       content = 
-        <div id='quote box' className={`quote-box${this.state.fade ? ' fade' : ''}`} onAnimationEnd={() => this.setState({fade: false})}>
-          <div id='text' className='quote'>{(typeof quote !== 'undefined') ? quote.quote : null }</div>
-          <div id='author' className='quote--author'>-{(typeof quote !== 'undefined') ? quote.author : null }</div>
+        <div id='quote box' className={`quote-box${fade ? ' fade' : ''}`} onAnimationEnd={() => this.setState({fade: false})}>
+          <div id='text' className='quote'>{(typeof selectedQuote !== 'undefined') ? selectedQuote.quote : null }</div>
+          <div id='author' className='quote--author'>-{(typeof selectedQuote !== 'undefined') ? selectedQuote.author : null }</div>
           <div className='buttons'>
             <a id='tweet-quote' className='button button--tweet' target='_blank' rel="noopener noreferrer" href={`https://twitter.com/intent/tweet?text=${encodedTweet}&hashtags=quotes`}>
             </a>
-            <div id='new-quote'className='button' onClick={this.getQuote} >New quote</div>
+            <div id='new-quote'className='button' onClick={this.getRandomQuote} >New quote</div>
           </div>
         </div>
     }
