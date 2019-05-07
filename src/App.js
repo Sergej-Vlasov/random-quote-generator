@@ -28,8 +28,7 @@ class App extends Component {
           console.log(error);
           this.setState({error: true})
         })
-    }
-      
+    }  
   }
 
   getRandomQuote = () => {
@@ -39,7 +38,10 @@ class App extends Component {
     } else {
       this.getQuotes();
     }
-    
+  }
+
+  onAnimationEnd = () => {
+    this.setState({fade: false})
   }
 
   render() {
@@ -48,17 +50,17 @@ class App extends Component {
     let content;
     if(error) {
       content = 
-        <div id='quote box' className={`quote-box${fade ? ' fade' : ''}`} onAnimationEnd={() => this.setState({fade: false})}>
+        <>
           <div id='text' className='quote'>Sorry, something went wrong!</div>
-        </div>
+        </>
     } else if (!quotes.length) {
       content = 
-        <div id='quote box' className={`quote-box${fade ? ' fade' : ''}`} onAnimationEnd={() => this.setState({fade: false})}>
+        <>
           <div id='text' className='quote'>Loading quote...</div>
-        </div>
+        </>
     } else {
       content = 
-        <div id='quote box' className={`quote-box${fade ? ' fade' : ''}`} onAnimationEnd={() => this.setState({fade: false})}>
+        <>
           <div id='text' className='quote'>{(typeof selectedQuote !== 'undefined') ? selectedQuote.quote : null }</div>
           <div id='author' className='quote--author'>-{(typeof selectedQuote !== 'undefined') ? selectedQuote.author : null }</div>
           <div className='buttons'>
@@ -66,12 +68,14 @@ class App extends Component {
             </a>
             <div id='new-quote'className='button' onClick={this.getRandomQuote} >New quote</div>
           </div>
-        </div>
+        </>
     }
 
     return (
       <div className="App">
-        {content}
+        <div id='quote box' className={`quote-box${fade ? ' fade' : ''}`} onAnimationEnd={this.onAnimationEnd}>
+          {content}
+        </div>
       </div>
     );
   }
